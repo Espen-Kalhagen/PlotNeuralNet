@@ -1,0 +1,48 @@
+\documentclass[border=15pt, multi, tikz]{standalone}
+%\usepackage{blocks}
+\usepackage{import}
+\subimport{../../layers/}{init}
+\usetikzlibrary{positioning}
+
+\def\ConvColor{rgb:yellow,5;red,2.5;white,5}
+\def\ConvReluColor{rgb:yellow,5;red,5;white,5}
+\def\PoolColor{rgb:red,1;black,0.3}
+\def\FcColor{rgb:blue,5;red,2.5;white,5}
+\def\FcReluColor{rgb:blue,5;red,5;white,4}
+\def\SoftmaxColor{rgb:magenta,5;black,7}
+
+\begin{document}
+\begin{tikzpicture}
+\tikzstyle{connection}=[ultra thick,every node/.style={sloped,allow upside down},draw=\edgecolor,opacity=0.7]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Draw Layer Blocks
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% 0 conv
+\pic[shift={(0,0,0)}] at (0,0,0) {RightBandedBox={name=cr1,caption=conv1,%
+        xlabel={{"32"}},ylabel=608,zlabel=608,fill=\ConvColor,bandfill=\ConvReluColor,%
+        height=60,width=3,depth=60}};
+
+% 1 max
+\pic[shift={(0,0,0)}] at (cr1-east) {Box={name=p1,%
+        fill=\PoolColor,opacity=0.5,height=30,width=1,depth=30}};
+
+
+% 2 conv
+\pic[shift={(2,0,0)}] at (0,0,0) {RightBandedBox={name=cr1,caption=conv1,%
+        xlabel={{"64"}},ylabel=304,zlabel=304,fill=\ConvColor,bandfill=\ConvReluColor,%
+        height=30,width=6,depth=30}};
+
+% 3 max
+\pic[shift={(0,0,0)}] at (cr1-east) {Box={name=p1,%
+        fill=\PoolColor,opacity=0.5,height=15,width=1,depth=15}};
+
+
+% 4,5,6 conv
+\pic[shift={(5,0,0)}] at (0,0,0) {RightBandedBox={name=cr1,caption=conv1%
+        xlabel={{"128","64","128"}},zlabel=152,fill=\ConvColor,bandfill=\ConvReluColor,%
+        height=15,width={12,6,12},depth=15}};
+
+
+\end{tikzpicture}
+\end{document}

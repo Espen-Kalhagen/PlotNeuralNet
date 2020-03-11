@@ -1,7 +1,7 @@
 *.aux
 *.log
 *.gz
-
+.vscode
 __pycache__
 books
 project

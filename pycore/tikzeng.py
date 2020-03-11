@@ -20,6 +20,7 @@ def to_cor():
 \def\FcColor{rgb:blue,5;red,2.5;white,5}
 \def\FcReluColor{rgb:blue,5;red,5;white,4}
 \def\SoftmaxColor{rgb:magenta,5;black,7}   
+\def\SumColor{rgb:blue,5;green,15}
 """
 
 def to_begin():
@@ -109,6 +110,19 @@ def to_UnPool(name, offset="(0,0,0)", to="(0,0,0)", width=1, height=32, depth=32
     };
 """
 
+def to_ResAdd(name, at):
+    return r"""
+\pic[shift={(1.5,0,0)}] at ("""+at+r"""-east) {Ball={name="""+name+r""",%
+    fill=\SumColor,opacity=0.6,%
+    radius=1.5,logo=$+$}};
+"""
+
+def to_ResConcat(name, at):
+    return r"""
+\pic[shift={(1.5,0,0)}] at """+at+r""" {Ball={name="""+name+r""",%
+    fill=\SumColor,opacity=0.6,%
+    radius=1.5,logo=$C$}};
+"""
 
 
 def to_ConvRes( name, s_filer=256, n_filer=64, offset="(0,0,0)", to="(0,0,0)", width=6, height=40, depth=40, opacity=0.2, caption=" " ):
@@ -170,6 +184,11 @@ def to_connection( of, to):
 \draw [connection]  ("""+of+"""-east)    -- node {\midarrow} ("""+to+"""-west);
 """
 
+def to_connection_yolo( of, to):
+    return r"""
+\draw [connection]  ("""+of+"""-east)    |- node {\midarrow} ("""+to+"""-west);
+"""
+
 def to_skip( of, to, pos=1.25):
     return r"""
 \path ("""+ of +"""-southeast) -- ("""+ of +"""-northeast) coordinate[pos="""+ str(pos) +"""] ("""+ of +"""-top) ;
@@ -178,6 +197,25 @@ def to_skip( of, to, pos=1.25):
 -- node {\copymidarrow}("""+of+"""-top)
 -- node {\copymidarrow}("""+to+"""-top)
 -- node {\copymidarrow} ("""+to+"""-north);
+"""
+
+def to_skip_ball( of, to, fromheight, pos=1.25):
+    return r"""
+\path ("""+ of +"""-east) -- ("""+ of +"""-east) coordinate[pos="""+ str(pos) +"""] ("""+ of +"""-top) ;
+\path ("""+ to +"""-south)  -- ("""+ to +"""-north)  coordinate[pos="""+ str(fromheight/2+pos) +"""] ("""+ to +"""-top) ;
+\draw [copyconnection]  ("""+of+"""-east)  
+|- node {\copymidarrow}("""+to+"""-top)
+-- node {\copymidarrow} ("""+to+"""-north);
+"""
+
+def to_Upscale(of, to):
+    return r"""
+\draw[densely dashed]
+("""+of+r"""-nearnortheast) -- ("""+to+r"""-nearnorthwest)
+("""+of+r"""-nearsoutheast) -- ("""+to+r"""-nearsouthwest)
+("""+of+r"""-farsoutheast)  -- ("""+to+r"""-farsouthwest)
+("""+of+r"""-farnortheast)  -- ("""+to+r"""-farnorthwest)
+;
 """
 
 def to_end():
